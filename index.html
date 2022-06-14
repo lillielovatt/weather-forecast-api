@@ -18,40 +18,76 @@
         Weather Dashboard
     </header>
 <!-- pl-5  -->
-    <main class="row justify-space-between pr-5 ">
-        <div class="col-12 col-md-3">
-            <!-- search a city/zipcode -->
-            <div class="search-city pb-4">
-                <h3 class="card-header">Search for a City</h3>
-                <form id="user-form" class="search-form">
-                    <label class="form-label" for="city"></label>
-                    <input type="text" name="city" id="city" class="form-input" autofocus="true" />
-                    <br/>
-                    <button class="btn" type="submit">Get Forecast</button>
-                </form>
+    <main class="container-fluid justify-space-between h-100">
+        <div class="row">
+            <div class="col-md-3">
+                <!-- search a city/zipcode -->
+                <div class="search-city pb-4">
+                    <h3 class="card-header">Search for a City</h3>
+                    <form id="user-form" class="search-form">
+                        <label class="form-label" for="city"></label>
+                        <input type="text" name="city" id="city" class="form-input" autofocus="true" />
+                        <br/>
+                        <button class="btn" type="submit">Get Forecast</button>
+                    </form>
+                </div>
+                <!-- cities from local storage -->
+                <div class="storage-city">
+                    <ul class="recent-city">
+                    </ul>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel quam beatae quae laudantium voluptas, aut
+                    deleniti, eius est eveniet distinctio minima nulla voluptates voluptate impedit minus eum doloribus
+                    tenetur! Architecto.
+                </div>
             </div>
-            <!-- cities from local storage -->
-            <div class="storage-city">
-                <ul class="recent-city">
-
-                </ul>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Vel quam beatae quae laudantium voluptas, aut
-                deleniti, eius est eveniet distinctio minima nulla voluptates voluptate impedit minus eum doloribus
-                tenetur! Architecto.
-            </div>
-        </div>
-        <div class="col-12 col-md-9">
-            <!-- today's forecast -->
-            <div class="forecast-today pb-5">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Reiciendis a quidem, tempore perspiciatis
-                suscipit animi magni voluptatibus expedita qui cumque temporibus rerum nostrum voluptates corrupti
-                dolore ratione, totam accusantium esse.
-            </div>
-            <!-- 5 day forecast -->
-            <div class="forecast-5day">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur modi est, molestias quisquam porro
-                temporibus natus expedita ab ea assumenda, laboriosam nemo itaque quos illo, eum architecto quia harum
-                quas?
+            <div class="col-md-9">
+                <!-- today's forecast -->
+                <div class="forecast-today pb-5 h-50">
+            
+                </div>
+                <!-- 5 day forecast -->
+                <div class="forecast-5day row h-50">
+                    <div class="col-md-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5></h5>
+                                <p></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>title</h5>
+                                <p>blah</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>title</h5>
+                                <p>blah</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>title</h5>
+                                <p>blah</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>title</h5>
+                                <p>blah</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -59,6 +95,7 @@
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <script type='text/javascript' src='./assets/js/config.js'></script>
     <script src="./assets/js/script.js"></script>
 </body>
 

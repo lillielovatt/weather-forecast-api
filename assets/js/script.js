@@ -2,7 +2,7 @@ const cityStorageEl = document.querySelector(".recent-city");
 const formEl = document.querySelector(".search-form");
 const forecastTodayEl = document.querySelector(".forecast-today");
 const forecast5DaysEl = document.querySelector(".forecast-5day");
-const apiId = "674c74b15352c07021c43ba1b8d4139b"; //1eb784753dd9691347d2b905eeeffc69
+const apiId = config.MY_API_TOKEN; //"674c74b15352c07021c43ba1b8d4139b"; 
 var recentCityStorage = [];
 
 loadCities();
@@ -62,33 +62,46 @@ function getForecast(lat, lon, city) {
                     uvIndex: data.current.uvi,
                     icon: data.current.weather[0].icon
                 }
-                var weatherArray = [weatherCurrentObj];
-                for (let i = 1; i < 6; i++) {
+                // var weatherArray = [weatherCurrentObj];
+                fillCurrentForecast(weatherCurrentObj);
+
+                var daily = data.daily.slice(1,6);
+                for (let i = 0; i < daily.length; i++) {
                     var weather5DayObj = {
-                        temp: data.daily[i].temp.day,
-                        humidity: data.daily[i].humidity,
+                        temp: daily[i].temp,
+                        humidity: daily[i].humidity,
                         windSpeed: data.daily[i].wind_speed,
-                        cityName: city,
+                        // cityName: city,
                         uvIndex: data.daily[i].uvi,
                         icon: data.daily[i].weather[0].icon
                     }
-                    weatherArray.push(weather5DayObj);
+                    // weatherArray.push(weather5DayObj);
+                    fill5DayForecast(weather5DayObj);
                 }
 
                 // console.log(weatherArray);
                 setStorage(city);
                 loadCities();
-                fillForecast(weatherArray);
+                // fillForecast(weatherArray);
             })
         }
     });
 
 }
 
-function fillForecast(weatherArray) {
+function fillCurrentForecast(weatherObj){
+    // obj destructuring
+    const {temp, humidity, windSpeed, cityName, uvIndex, icon} = weatherObj;
+
+}
+
+function fill5DayForecast(weatherObj) {
+    // obj destructuring
+    const {temp, humidity, windSpeed, cityName, uvIndex, icon} = weatherObj;
+
     // fill in weatherArray[0] with today's forecast, class=forecast-today
     var cityDate = document.createElement("h2");
-    cityDate.innerHTML = weatherArray[0].cityName + " " + moment().format("dddd MMMM DD, YYYY") + "<img src='http://openweathermap.org/img/w/" + weatherArray[0].icon + ".png ' alt='' />";
+    cityDate.innerHTML = weatherArray[0].cityName + " - " + moment().format("dddd MMMM DD, YYYY") + "<img src='http://openweathermap.org/img/w/" + weatherArray[0].icon + ".png ' alt='' />";
     forecastTodayEl.appendChild(cityDate);
 
     // fill in weather[1:5] with 5 day forecast, class=forecast-5day
@@ -96,9 +109,21 @@ function fillForecast(weatherArray) {
     // http://openweathermap.org/img/w/04d.png icon, just replace "04d" with anything else 
 
     for (let i = 1; i < 6; i++) {
-        var weatherNextDay = document.createElement("h3");
-        weatherNextDay.innerHTML = moment().add(i, "d").format("dddd MMMM DD, YYYY") + "<img src='http://openweathermap.org/img/w/" + weatherArray[i].icon + ".png ' alt='' />";
+        var date = moment().add(i, "d").format("MMMM DD");
+        //  + "<img src='http://openweathermap.org/img/w/" + weatherArray[i].icon + ".png ' alt='' />";
+        var weatherInfo = ""
 
+        forecast5DaysEl.innerHTML += `
+        <div class="col-md-2 day${i}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5></h5>
+                            <p></p>
+                        </div>
+                    </div>
+                </div>
+        `
+        forecast5DaysEl.innerHTML += '<div class="col-md-2 day' + i + '">            <div class="card">                <div class="card-body">                    <h5>' + date + '<img src="http://openweathermap.org/img/w/' + weatherArray[i].icon + '.png" alt=""/> </h5>                    <p class="' + weatherInfo + '"></p>                </div>        </div >    </div > ';
 
     }
 
