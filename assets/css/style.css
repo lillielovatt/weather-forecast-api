@@ -32,3 +32,6 @@ header {
 .storage-city{
     padding-top: 20px;
 }
+ul{
+    list-style:none;
+}
