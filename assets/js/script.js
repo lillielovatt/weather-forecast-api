@@ -10,7 +10,6 @@ loadCities();
 
 
 // takes cities recently searched and saved in local storage, loads them as buttons in class="storage-city"
-
 function loadCities() {
     // clears the history DIV, necessary when calling this function after a new search
 
@@ -65,15 +64,15 @@ function getForecast(lat, lon, city) {
                 // var weatherArray = [weatherCurrentObj];
                 fillCurrentForecast(weatherCurrentObj);
 
-                var daily = data.daily.slice(1,6);
+                var daily = data.daily.slice(1, 6);
                 for (let i = 0; i < daily.length; i++) {
                     var weather5DayObj = {
-                        temp: daily[i].temp,
+                        temp: daily[i].temp.day,
                         humidity: daily[i].humidity,
                         windSpeed: data.daily[i].wind_speed,
-                        // cityName: city,
-                        uvIndex: data.daily[i].uvi,
-                        icon: data.daily[i].weather[0].icon
+                        // uvIndex: data.daily[i].uvi,
+                        icon: data.daily[i].weather[0].icon,
+                        day: i
                     }
                     // weatherArray.push(weather5DayObj);
                     fill5DayForecast(weather5DayObj);
@@ -89,43 +88,38 @@ function getForecast(lat, lon, city) {
 
 }
 
-function fillCurrentForecast(weatherObj){
+function fillCurrentForecast(weatherObj) {
     // obj destructuring
-    const {temp, humidity, windSpeed, cityName, uvIndex, icon} = weatherObj;
+    const { temp, humidity, windSpeed, cityName, uvIndex, icon } = weatherObj;
 
-}
-
-function fill5DayForecast(weatherObj) {
-    // obj destructuring
-    const {temp, humidity, windSpeed, cityName, uvIndex, icon} = weatherObj;
-
-    // fill in weatherArray[0] with today's forecast, class=forecast-today
-    var cityDate = document.createElement("h2");
-    cityDate.innerHTML = weatherArray[0].cityName + " - " + moment().format("dddd MMMM DD, YYYY") + "<img src='http://openweathermap.org/img/w/" + weatherArray[0].icon + ".png ' alt='' />";
-    forecastTodayEl.appendChild(cityDate);
-
-    // fill in weather[1:5] with 5 day forecast, class=forecast-5day
-
-    // http://openweathermap.org/img/w/04d.png icon, just replace "04d" with anything else 
-
-    for (let i = 1; i < 6; i++) {
-        var date = moment().add(i, "d").format("MMMM DD");
-        //  + "<img src='http://openweathermap.org/img/w/" + weatherArray[i].icon + ".png ' alt='' />";
-        var weatherInfo = ""
-
-        forecast5DaysEl.innerHTML += `
-        <div class="col-md-2 day${i}">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5></h5>
-                            <p></p>
-                        </div>
-                    </div>
+    var date = moment().format("dddd MMMM DD, YYYY")
+    forecastTodayEl.innerHTML = `
+        <div>
+            <div>
+                <div>
+                    <h2>${cityName} - ${date} <img src="http://openweathermap.org/img/w/${icon}.png"/></h2>
+                    <p>Temp: ${temp}&deg;F</p>
+                    <p>Wind: ${windSpeed} MPH</p>
+                    <p>Humidity: ${humidity}%</p>
+                    <p>UV Index: <span class="uv-index"> ${uvIndex} </span></p>
                 </div>
-        `
-        forecast5DaysEl.innerHTML += '<div class="col-md-2 day' + i + '">            <div class="card">                <div class="card-body">                    <h5>' + date + '<img src="http://openweathermap.org/img/w/' + weatherArray[i].icon + '.png" alt=""/> </h5>                    <p class="' + weatherInfo + '"></p>                </div>        </div >    </div > ';
-
+            </div>
+        </div>
+    `;
+    // forecastTodayEl.appendChild(cityDate);
+    var uvIndexEl = document.querySelector(".uv-index");
+    if(uvIndex<=2){
+        uvIndexEl.style.backgroundColor="#00ff00";
+    } else if(2<uvIndex<=6){
+        uvIndexEl.style.backgroundColor="#ffff00";
+    }else if(6<uvIndex<=8){
+        uvIndexEl.style.backgroundColor="#ffa500";
+    }else if(8<uvIndex<=11){
+        uvIndexEl.style.backgroundColor="#ff0000";
+    }else if(uvIndex>11){
+        uvIndexEl.style.backgroundColor="#dda0dd";
     }
+
 
     // UV <= 2 green
     // 2 < UV <= 6 yellow
@@ -133,7 +127,49 @@ function fill5DayForecast(weatherObj) {
     // 8 < UV <= 11 red 
     // UV > 11 lavender
     // background colors
+
+
+    // cityDate.innerHTML = weatherArray[0].cityName + " - " + moment().format("dddd MMMM DD, YYYY") + "<img src='http://openweathermap.org/img/w/" + weatherArray[0].icon + ".png ' alt='' />";
+    
+
 }
+
+function fill5DayForecast(weatherObj) {
+    // obj destructuring
+    const { temp, humidity, windSpeed, cityName, icon, day } = weatherObj;
+
+    // // fill in weatherArray[0] with today's forecast, class=forecast-today
+    // var cityDate = document.createElement("h2");
+    // cityDate.innerHTML = weatherArray[0].cityName + " - " + moment().format("dddd MMMM DD, YYYY") + "<img src='http://openweathermap.org/img/w/" + weatherArray[0].icon + ".png ' alt='' />";
+    // forecastTodayEl.appendChild(cityDate);
+
+    // // fill in weather[1:5] with 5 day forecast, class=forecast-5day
+
+    // // http://openweathermap.org/img/w/04d.png icon, just replace "04d" with anything else 
+
+
+    var date = moment().add(day, "d").format("MMMM DD");
+    //  + "<img src='http://openweathermap.org/img/w/" + weatherArray[i].icon + ".png ' alt='' />";
+    // var weatherInfo = ""
+    console.log(temp);
+    forecast5DaysEl.innerHTML += `
+        <div class="col-md-2 day${day}">
+            <div class="card">
+                <div class="card-body">
+                    <h5>${date} <img src="http://openweathermap.org/img/w/${icon}.png"/></h5>
+                    <p>Temp: ${temp} &deg;F</p>
+                    <p>Wind: ${windSpeed} MPH</p>
+                    <p>Humidity: ${humidity}%</p>
+                </div>
+            </div>
+        </div>
+        `;
+    // forecast5DaysEl.innerHTML += '<div class="col-md-2 day' + i + '">            <div class="card">                <div class="card-body">                    <h5>' + date + '<img src="http://openweathermap.org/img/w/' + weatherArray[i].icon + '.png" alt=""/> </h5>                    <p class="' + weatherInfo + '"></p>                </div>        </div >    </div > ';
+
+}
+
+    
+
 
 function setStorage(city) {
     recentCityStorage = JSON.parse(localStorage.getItem("highscore")) || [];
