@@ -39,11 +39,15 @@ header {
     padding-top: 20px;
     text-align: center;
 }
-ul{
+ul li{
     list-style:none;
+    width: max-content;
+    padding: 5px 10px 5px 10px;
+    text-align: center;
 }
-li{
-    padding-top:5px;
+li:hover{
+    background-color: aqua;
+    border-radius: 25px 25px 25px 25px;
 }
 .recent-city{
     padding-left:0;

@@ -22,10 +22,23 @@ function loadCities() {
             cityStorageEl.appendChild(cityEl);
         }
     }
-    // make the li item a clickable element, that when you click it, it calls function
 }
 
-function getCity(event) {
+// called when someone clicks in the History ol element
+function recentCityHistoryHandler(event) {
+    // checks to see if user clicked on a list element. If not--just clicked elsewhere within ol element--then nothing happens, and user exits function
+    if (event.target.tagName === "LI") {
+        // takes city name from innerText
+        var recentCity = event.target.innerText; 
+        // calls function with city name
+        getLatLon(recentCity);
+    }
+}
+
+// when you click on a city in the History list, calls function recentCityHistoryHandler
+cityStorageEl.addEventListener("click", recentCityHistoryHandler);
+
+function getCityName(event){
     // stops from refreshing upon submit botton being clicked
     event.preventDefault();
 
@@ -34,6 +47,12 @@ function getCity(event) {
     cityInput = correctCaseCityName(cityInput);
     document.querySelector("input[name='city']").value = "";
 
+    // takes city name and calls function to retrieve lat and lon from the call
+    getLatLon(cityInput);
+}
+
+// takes user input for city and crafts API URL using it, then extracts lat and lon values to perform another API call
+function getLatLon(cityInput) {
     // clear forecast, current and future, to repopulate based on call below
     while (forecastTodayEl.firstChild || forecast5DaysEl.firstChild) {
         if (forecastTodayEl.firstChild) {
@@ -41,7 +60,6 @@ function getCity(event) {
         }
         forecast5DaysEl.removeChild(forecast5DaysEl.lastChild);
     }
-
     // craft API URL with the city input, and with API key from OpenWeather
     var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityInput + "&appid=" + apiId;
     fetch(apiUrl).then(function (response) {
@@ -194,24 +212,13 @@ function setStorage(city) {
         localStorage.setItem("recent-city", JSON.stringify(recentCityStorage));
     }
 
-
     // if city is already in the list, then delete previous place--bring to the end. 
 }
 
 
-formEl.addEventListener("submit", getCity);
+formEl.addEventListener("submit", getCityName);
 
 
-// when you click the submit button, with a city, then it GETS the forecast
 
-// need two kinds of functions maybe? the part with the fetch call, and the part where we fill in the HTML
-// pass info thru with object
-
-// emojis for weather?
-// color for UV index?
-
-
-// adds most recently searched city to the top of the list
-// if local storage is greater than 7 cities, then push the last one out.
 
 // how to deal with cities that have 2 of the same name??
