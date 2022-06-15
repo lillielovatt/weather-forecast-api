@@ -10,6 +10,16 @@ SO THAT I can plan a trip accordingly
 
 
 
+pretty readMe
+prettier css
+
+finish script comments
+
+- make it so history of cities does not repeat?
+- duplicate cities?
+
+
+
 
 
 GIVEN a weather dashboard with form inputs

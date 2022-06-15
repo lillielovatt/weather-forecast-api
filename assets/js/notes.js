@@ -200,3 +200,21 @@ formEl.addEventListener("submit", getCity);
 // if local storage is greater than 7 cities, then push the last one out.
 
 // how to deal with cities that have 2 of the same name??
+
+// created this fix city input case but turns out I can just get it from the call itself
+// if you type in "san diego" or "portland", it automatically adjusts to corrected "San Diego" or "Portland"
+// function correctCaseCityName(cityStr) {
+//     cityStr = cityStr.toLowerCase();
+//     var myCityArray = cityStr.split(" ");
+//     if (myCityArray.length === 1) {
+//         cityStr = cityStr[0].toUpperCase() + cityStr.substring(1);
+//         return cityStr;
+//     } else {
+//         var cityStrCorrect = "";
+//         for (let i = 0; i < myCityArray.length; i++) {
+//             myCityArray[i] = myCityArray[i][0].toUpperCase() + myCityArray[i].substr(1);
+//             cityStrCorrect += myCityArray[i] + " ";
+//         }
+//         return cityStrCorrect.trim();
+//     }
+// }

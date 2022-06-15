@@ -4,8 +4,9 @@ body{
 }
 
 header {
+    background: linear-gradient(to right, #e6e8fc 0%,#cbcaf6 38%,#bfc1f5 53%,#b4bff4 100%);
     background-color: rgba(0, 0, 255, 0.455);
-    color: white;
+    color: black;
     padding: 20px 0 20px 20px;
     font-size: 2.5rem;
     font-weight: bold;
@@ -64,4 +65,18 @@ li:hover{
 p{
     font-weight: 500;
 }
+.forecast-container{
+    border-left:10px solid rgba(0, 0, 255, 0.455);
+}
 
+.current-date{
+    font-size:24px;
+    font-weight: bold;
+}
+
+.city-name{
+    font-size:48px;
+    font-weight: bold;
+}
+
+/* style="font-weight:bold font-size:48px" */

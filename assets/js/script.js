@@ -2,15 +2,11 @@ const cityStorageEl = document.querySelector(".recent-city");
 const formEl = document.querySelector(".search-form");
 const forecastTodayEl = document.querySelector(".forecast-today");
 const forecast5DaysEl = document.querySelector(".forecast-5day");
-
 const apiId = config.MY_API_TOKEN;
-var recentCityStorage = [];
 
 loadCities();
 
-
-
-// takes cities recently searched and saved in local storage, loads them as buttons in class="storage-city"
+// takes cities recently searched and saved in local storage, loads them as li in class="storage-city"
 function loadCities() {
     while (cityStorageEl.firstChild) {
         cityStorageEl.removeChild(cityStorageEl.lastChild);
@@ -38,13 +34,14 @@ function recentCityHistoryHandler(event) {
 // when you click on a city in the History list, calls function recentCityHistoryHandler
 cityStorageEl.addEventListener("click", recentCityHistoryHandler);
 
+// called when user has (in theory) entered a viable city in the form and clicked button "get forecast"
 function getCityName(event){
     // stops from refreshing upon submit botton being clicked
     event.preventDefault();
 
     // saves city value from user input, sends it to outside function to correct case of letters, and then clears the form
     var cityInput = document.querySelector("input[name='city']").value;
-    cityInput = correctCaseCityName(cityInput);
+    // cityInput = correctCaseCityName(cityInput);
     document.querySelector("input[name='city']").value = "";
 
     // takes city name and calls function to retrieve lat and lon from the call
@@ -54,18 +51,19 @@ function getCityName(event){
 // takes user input for city and crafts API URL using it, then extracts lat and lon values to perform another API call
 function getLatLon(cityInput) {
     // clear forecast, current and future, to repopulate based on call below
-    while (forecastTodayEl.firstChild || forecast5DaysEl.firstChild) {
-        if (forecastTodayEl.firstChild) {
-            forecastTodayEl.removeChild(forecastTodayEl.lastChild);
-        }
+    while (forecastTodayEl.firstChild) {
+        forecastTodayEl.removeChild(forecastTodayEl.lastChild);
+    }
+    while (forecast5DaysEl.firstChild) {
         forecast5DaysEl.removeChild(forecast5DaysEl.lastChild);
     }
+
     // craft API URL with the city input, and with API key from OpenWeather
     var apiUrl = "https://api.openweathermap.org/data/2.5/weather?q=" + cityInput + "&appid=" + apiId;
     fetch(apiUrl).then(function (response) {
         if (response.ok) { //if there's no error thrown from this call to the API
             response.json().then(function (data) {
-                getForecast(data.coord.lat, data.coord.lon, cityInput);
+                getForecast(data.coord.lat, data.coord.lon, data.name);
             })
         } else {
             // display that the city does not exist. It could be another error, but we will assume this is the issue as of now.
@@ -74,23 +72,6 @@ function getLatLon(cityInput) {
             `
         }
     });
-}
-
-// if you type in "san diego" or "portland", it automatically adjusts to corrected "San Diego" or "Portland"
-function correctCaseCityName(cityStr) {
-    cityStr = cityStr.toLowerCase();
-    var myCityArray = cityStr.split(" ");
-    if (myCityArray.length === 1) {
-        cityStr = cityStr[0].toUpperCase() + cityStr.substring(1);
-        return cityStr;
-    } else {
-        var cityStrCorrect = "";
-        for (let i = 0; i < myCityArray.length; i++) {
-            myCityArray[i] = myCityArray[i][0].toUpperCase() + myCityArray[i].substr(1);
-            cityStrCorrect += myCityArray[i] + " ";
-        }
-        return cityStrCorrect.trim();
-    }
 }
 
 // using lat and lon, extracts info from API call INCLUDING: an icon representation of weather conditions, the temperature, the humidity, the wind speed, and the UV index
@@ -150,7 +131,7 @@ function fillCurrentForecast(weatherObj) {
         <div>
             <div>
                 <div>
-                    <h2>${cityName} - ${date} <img src="http://openweathermap.org/img/w/${icon}.png"/></h2>
+                    <h2 class="city-name">${cityName} <span class="current-date"> ${date}</span> <img src="http://openweathermap.org/img/w/${icon}.png"/></h2>
                     <p>Temp: ${temp}&deg;F</p>
                     <p>Wind: ${windSpeed} MPH</p>
                     <p>Humidity: ${humidity}%</p>
@@ -163,15 +144,15 @@ function fillCurrentForecast(weatherObj) {
     // selects the UV index value, which is within its own span element, allowing us to change the background color of it individually
     var uvIndexEl = document.querySelector(".uv-index");
     if (uvIndex <= 2) {
-        uvIndexEl.style.backgroundColor = "#00ff00";
-    } else if (2 < uvIndex <= 6) {
-        uvIndexEl.style.backgroundColor = "#ffff00";
-    } else if (6 < uvIndex <= 8) {
-        uvIndexEl.style.backgroundColor = "#ffa500";
-    } else if (8 < uvIndex <= 11) {
-        uvIndexEl.style.backgroundColor = "#ff0000";
+        uvIndexEl.style.backgroundColor = "#00ff00"; //green
+    } else if (2 < uvIndex && uvIndex<= 6) {
+        uvIndexEl.style.backgroundColor = "#ffff00"; //yellow
+    } else if (6 < uvIndex && uvIndex <= 8) {
+        uvIndexEl.style.backgroundColor = "#ffa500"; //orange
+    } else if (8 < uvIndex && uvIndex <= 11) {
+        uvIndexEl.style.backgroundColor = "#ff0000"; //red
     } else if (uvIndex > 11) {
-        uvIndexEl.style.backgroundColor = "#dda0dd";
+        uvIndexEl.style.backgroundColor = "#dda0dd"; //purple
     }
 }
 
@@ -181,14 +162,14 @@ function fill5DayForecast(weatherObj) {
     const { temp, humidity, windSpeed, cityName, icon, day } = weatherObj;
 
     // get today's date, then add var "day" days + 1 (where here, day is var i from our for loop, passed into this function as var day)
-    var date = moment().add(day + 1, "d").format("MMMM DD");
+    var date = moment().add(day + 1, "d").format("MMM DD");
 
     //using template literals, we can add HTML much easier than declaring and appending each element, using ${} and assigned variables
     forecast5DaysEl.innerHTML += `
         <div class="col-md-2 five-day">
             <div class="card">
                 <div class="card-body">
-                    <h5>${date} <img src="http://openweathermap.org/img/w/${icon}.png"/></h5>
+                    <h5 style="font-weight:bold">${date.toUpperCase()} <img src="http://openweathermap.org/img/w/${icon}.png"/></h5>
                     <p>Temp: ${temp} &deg;F</p>
                     <p>Wind: ${windSpeed} MPH</p>
                     <p>Humidity: ${humidity}%</p>
@@ -198,11 +179,19 @@ function fill5DayForecast(weatherObj) {
         `;
 }
 
+// once a city's forecast is successfully called with API and fetch, only THEN do we add the city to storage
 function setStorage(city) {
-    recentCityStorage = JSON.parse(localStorage.getItem("recent-city")) || [];
+    var recentCityStorage = JSON.parse(localStorage.getItem("recent-city")) || [];
     if (!localStorage.getItem("recent-city")) {
         localStorage.setItem("recent-city", recentCityStorage);
     };
+    // checks if the city already exists in the array of local storage items
+    var sameCity = recentCityStorage.indexOf(city); 
+    //if it's not there, it's = -1, and we don't need to worry and can add the city normally and just bypass "if" statement. 
+    // but if it's 0 or greater, then we splice the city out of the array, and add city to the end
+    if(sameCity>-1){
+        recentCityStorage.splice(sameCity,1);
+    }
     recentCityStorage.push(city);
     localStorage.setItem("recent-city", JSON.stringify(recentCityStorage));
 
@@ -211,8 +200,7 @@ function setStorage(city) {
         recentCityStorage.shift();
         localStorage.setItem("recent-city", JSON.stringify(recentCityStorage));
     }
-
-    // if city is already in the list, then delete previous place--bring to the end. 
+ 
 }
 
 
