@@ -1,3 +1,5 @@
+// how to deal with cities that have 2 of the same name??
+
 const cityStorageEl = document.querySelector(".recent-city");
 const formEl = document.querySelector(".search-form");
 const forecastTodayEl = document.querySelector(".forecast-today");

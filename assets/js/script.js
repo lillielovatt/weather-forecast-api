@@ -1,17 +1,21 @@
+// initialize the global variables--the 3 empty elements I created in index.html, waiting to be appended to/filled, and the search form button element
 const cityStorageEl = document.querySelector(".recent-city");
-const formEl = document.querySelector(".search-form");
 const forecastTodayEl = document.querySelector(".forecast-today");
 const forecast5DaysEl = document.querySelector(".forecast-5day");
+const formEl = document.querySelector(".search-form");
 const apiId = config.MY_API_TOKEN;
 
+// loads history of recently searched cities
 loadCities();
 
 // takes cities recently searched and saved in local storage, loads them as li in class="storage-city"
 function loadCities() {
+    // clears the element so when a city is added dynamically, it doesn't add all the same cities on top of the others
     while (cityStorageEl.firstChild) {
         cityStorageEl.removeChild(cityStorageEl.lastChild);
     }
-    if (localStorage.getItem("recent-city")) {
+    if (localStorage.getItem("recent-city")) { //if there are any cities in local storage
+        // go backwards, starting from the end of the array--because the "push" method means the most recently searched city is the LAST in the array
         for (let i = JSON.parse(localStorage.getItem("recent-city")).length - 1; i >= 0; i--) {
             var cityEl = document.createElement("li");
             cityEl.innerText = JSON.parse(localStorage.getItem("recent-city"))[i];
@@ -121,7 +125,7 @@ function getForecast(lat, lon, city) {
 
 // takes all info (temp, humidity, windSpeed, cityName, uvIndex, icon) and dynamically displays current forecast on page using HTML
 function fillCurrentForecast(weatherObj) {
-    // obj destructuring
+    // obj destructuring, so I can reference the keys in the object without using obj.key syntax
     const { temp, humidity, windSpeed, cityName, uvIndex, icon } = weatherObj;
     // get today's date
     var date = moment().format("dddd MMMM DD, YYYY")
@@ -131,7 +135,7 @@ function fillCurrentForecast(weatherObj) {
         <div>
             <div>
                 <div>
-                    <h2 class="city-name">${cityName} <span class="current-date"> ${date}</span> <img src="http://openweathermap.org/img/w/${icon}.png"/></h2>
+                    <h2 class="city-name">${cityName} <span class="current-date"> ${date}</span><img src="http://openweathermap.org/img/w/${icon}.png"/></h2>
                     <p>Temp: ${temp}&deg;F</p>
                     <p>Wind: ${windSpeed} MPH</p>
                     <p>Humidity: ${humidity}%</p>
@@ -160,8 +164,7 @@ function fillCurrentForecast(weatherObj) {
 function fill5DayForecast(weatherObj) {
     // obj destructuring
     const { temp, humidity, windSpeed, cityName, icon, day } = weatherObj;
-
-    // get today's date, then add var "day" days + 1 (where here, day is var i from our for loop, passed into this function as var day)
+    // get today's date, then add var "day" + 1 (where here, var "day" is = i from our previous for loop)
     var date = moment().add(day + 1, "d").format("MMM DD");
 
     //using template literals, we can add HTML much easier than declaring and appending each element, using ${} and assigned variables
@@ -169,7 +172,7 @@ function fill5DayForecast(weatherObj) {
         <div class="col-md-2 five-day">
             <div class="card">
                 <div class="card-body">
-                    <h5 style="font-weight:bold">${date.toUpperCase()} <img src="http://openweathermap.org/img/w/${icon}.png"/></h5>
+                    <h5 style="font-weight:bold">${date.toUpperCase()}<img src="http://openweathermap.org/img/w/${icon}.png"/></h5>
                     <p>Temp: ${temp} &deg;F</p>
                     <p>Wind: ${windSpeed} MPH</p>
                     <p>Humidity: ${humidity}%</p>
@@ -181,32 +184,29 @@ function fill5DayForecast(weatherObj) {
 
 // once a city's forecast is successfully called with API and fetch, only THEN do we add the city to storage
 function setStorage(city) {
+    // initializes recentCityStorage array, and checks to see if localStorage has been set yet
     var recentCityStorage = JSON.parse(localStorage.getItem("recent-city")) || [];
     if (!localStorage.getItem("recent-city")) {
         localStorage.setItem("recent-city", recentCityStorage);
     };
-    // checks if the city already exists in the array of local storage items
+
+    // checks if the user input city already exists in the array of local storage items
     var sameCity = recentCityStorage.indexOf(city); 
-    //if it's not there, it's = -1, and we don't need to worry and can add the city normally and just bypass "if" statement. 
+    // if it's not there, it's = -1, and we don't need to worry and can add the city normally and just bypass "if" statement. 
     // but if it's 0 or greater, then we splice the city out of the array, and add city to the end
     if(sameCity>-1){
         recentCityStorage.splice(sameCity,1);
     }
+    // adds the city to the array--either for the first time, or to the end because it is the most recent search
     recentCityStorage.push(city);
     localStorage.setItem("recent-city", JSON.stringify(recentCityStorage));
 
-    // if storage gets bigger than 7 cities, then delete the last one--WHICH IS THE FIRST ONE IN THE LIST.
+    // if storage gets bigger than 8 cities, then delete the oldest search--WHICH IS THE FIRST ONE IN THE LIST
     if (JSON.parse(localStorage.getItem("recent-city")).length > 8) {
         recentCityStorage.shift();
         localStorage.setItem("recent-city", JSON.stringify(recentCityStorage));
     }
- 
 }
 
-
+// when user clicks on the submit button, runs function getCityName and starts first API call
 formEl.addEventListener("submit", getCityName);
-
-
-
-
-// how to deal with cities that have 2 of the same name??

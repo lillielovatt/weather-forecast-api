@@ -22,9 +22,9 @@
     <header>
         Weather Dashboard
     </header>
-    <!-- pl-5  -->
     <main class="container-fluid justify-space-between h-100">
         <div class="row">
+            <!-- left side, 3 columns wide, for user input and history -->
             <div class="col-md-3">
                 <!-- search a city/zipcode -->
                 <div class="search-city pb-4">
@@ -43,25 +43,23 @@
                     </ul>
                 </div>
             </div>
+            <!-- right side, 9 columns wide, for current forecast and 5 day -->
             <div class="col-md-9 forecast-container">
                 <!-- today's forecast -->
                 <div class="forecast-today pt-3 pb-3 ">
-
                 </div>
                 <!-- 5 day forecast -->
                 <div class="forecast-5day row">
-            
                 </div>
             </div>
         </div>
-
     </main>
 
-
-
-
+    <!-- moment js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <!-- file that allows me to reference but hide my API key -->
     <script type='text/javascript' src='./assets/js/config.js'></script>
+    <!-- main script.js file -->
     <script src="./assets/js/script.js"></script>
 </body>
 

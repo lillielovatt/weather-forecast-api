@@ -2,16 +2,14 @@ body{
     font-family: 'Barlow', sans-serif;
     /* font-family: 'Libre Franklin', sans-serif; */
 }
-
 header {
     background: linear-gradient(to right, #e6e8fc 0%,#cbcaf6 38%,#bfc1f5 53%,#b4bff4 100%);
     background-color: rgba(0, 0, 255, 0.455);
     color: black;
     padding: 20px 0 20px 20px;
-    font-size: 2.5rem;
+    font-size: 3rem;
     font-weight: bold;
 }
-
 .btn {
     background-color: aqua;
     border-radius: 25px 25px 25px 25px;
@@ -54,7 +52,6 @@ li:hover{
     padding-left:0;
     margin-bottom: 0;
 }
-
 .uv-index{
     border-radius: 7px 7px 7px 7px;
     padding: 5px 5px 5px 5px;
@@ -64,19 +61,16 @@ li:hover{
 }
 p{
     font-weight: 500;
+    font-size:16px;
 }
 .forecast-container{
     border-left:10px solid rgba(0, 0, 255, 0.455);
 }
-
 .current-date{
     font-size:24px;
     font-weight: bold;
 }
-
 .city-name{
     font-size:48px;
     font-weight: bold;
 }
-
-/* style="font-weight:bold font-size:48px" */
