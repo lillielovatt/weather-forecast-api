@@ -3,6 +3,9 @@ const cityStorageEl = document.querySelector(".recent-city");
 const forecastTodayEl = document.querySelector(".forecast-today");
 const forecast5DaysEl = document.querySelector(".forecast-5day");
 const formEl = document.querySelector(".search-form");
+var config = {
+    MY_API_TOKEN: "674c74b15352c07021c43ba1b8d4139b"
+};
 const apiId = config.MY_API_TOKEN;
 
 // loads history of recently searched cities
